@@ -1,5 +1,7 @@
 package com.educandoweb.springbootmongodb.services;
 
+import java.time.DateTimeException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,5 +25,15 @@ public class PostService {
 
     public List<Post> findByTitle(String text) {
         return repository.findByTitle(text);
+    }
+
+    public List<Post> fullSearch(String text, LocalDate minDate, LocalDate maxDate) {
+        try {
+            maxDate = LocalDate.of(maxDate.getYear(), maxDate.getMonthValue(), maxDate.getDayOfMonth() + 1);
+            return repository.fullSearch(text, minDate, maxDate);
+        }
+        catch (DateTimeException e) {
+            return repository.fullSearch(text, minDate, maxDate);
+        }
     }
 }
